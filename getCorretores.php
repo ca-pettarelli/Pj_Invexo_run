@@ -1,22 +1,19 @@
 <?php
 
-class Negocios 
+class Corretor 
 {
-    public static function index($pagina, $registros)
+    public static function index($id)
     {
-        $limit = $registros;
-        $start = ($pagina - 1) * $limit;
-
-        $url = 'https://api.moskitcrm.com/v2/deals/search/?start' . $start . '&limit=' . $limit . '&order=asc';
+        $url = 'https://api.moskitcrm.com/v2/users/search';
 
         // Create a new cURL resource
         $ch = curl_init($url);
 
         // Setup request to send json via POST
         $data = array(
-            'field' => 'CF_lXODObivipvANmaN',
-            'expression' => 'all_of',
-            'values' => array(165206),
+            'field' => 'id',
+            'expression' => 'one_of',
+            'values' => array($id),
         );
         // $payload = json_encode(array("user" => $data));
         $payload = json_encode($data);
