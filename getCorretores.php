@@ -4,7 +4,7 @@ class Corretor
 {
     public static function index($id)
     {
-        $url = 'https://api.moskitcrm.com/v2/users/search';
+        $url = 'https://api.moskitcrm.com/v2/users/search?order=desc';
 
         // Create a new cURL resource
         $ch = curl_init($url);

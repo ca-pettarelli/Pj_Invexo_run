@@ -7,7 +7,7 @@ class Negocios
         $limit = $registros;
         $start = ($pagina - 1) * $limit;
 
-        $url = 'https://api.moskitcrm.com/v2/deals/search/?start' . $start . '&limit=' . $limit . '&order=asc';
+        $url = 'https://api.moskitcrm.com/v2/deals/search/?start' . $start . '&limit=' . $limit . '&order=desc';
 
         // Create a new cURL resource
         $ch = curl_init($url);

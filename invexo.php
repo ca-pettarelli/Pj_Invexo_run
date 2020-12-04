@@ -75,7 +75,7 @@
                         <th scope="col">Bairro</th>
                         <th scope="col">Corretor</th>
                         <th scope="col">Origem</th>
-                        <th scope="col-1">Qualificação</th>
+                        <th scope="col">Qualificação</th>
                         <th scope="col">Horário Adicionado</th>
                         <th scope="col">Mensagem</th>
                     </tr>
@@ -83,35 +83,41 @@
 
                 <tbody>
                     <?php include_once 'getCorretores.php';
-                        foreach ($result as $user):
-                            $date = explode('T', $user->dateCreated);
-                            $dia = $date[0];
-                            $hora = $date[1];
+                    foreach ($result as $user):
+                        $idCorretor = '';
+                        $Corretor = '';
+                        $CorretorName = '';
 
-                            $d = explode('-', $dia)[2];
-                            $m = explode('-', $dia)[1];
-                            $a = explode('-', $dia)[0];
-                            $finaldia = $d . '-'. $m . '-'. $a;
+                        $date = explode('T', $user->dateCreated);
+                        $dia = $date[0];
+                        $hora = $date[1];
 
-                            $horario = explode('.', $hora)[0];
-                            $H = intval(explode(':', $horario)[0]) - 3;
-                            $M = explode(':', $horario)[1];
-                            $S = explode(':', $horario)[2];
-                            $finalHora = $H . ':'. $M . ':' . $S;
+                        $d = explode('-', $dia)[2];
+                        $m = explode('-', $dia)[1];
+                        $a = explode('-', $dia)[0];
+                        $finaldia = $d . '-'. $m . '-'. $a;
 
-                            $finalDate = $finaldia .' '. $finalHora ."\n";
-                            $Negocio = '';
-                            $Empreendimento = '';
+                        $horario = explode('.', $hora)[0];
+                        $H = intval(explode(':', $horario)[0]) - 3;
+                        $M = explode(':', $horario)[1];
+                        $S = explode(':', $horario)[2];
+                        $finalHora = $H . ':'. $M . ':' . $S;
 
-                            if (strpos($user->name, '|')){
-                                $name = explode('|', $user->name);
-                                $Empreendimento = $name[1];
-                                $Negocio = $name[0];
-                            }
+                        $finalDate = $finaldia .' '. $finalHora ."\n";
+                        $Negocio = '';
+                        $Empreendimento = '';
 
-                            $idCorretor = $user->responsible->id;
-                            $Corretor = Corretor::index($idCorretor);
-                            $CorretorName = $Corretor[0]->name; 
+                        if (strpos($user->name, '|')){
+                            $name = explode('|', $user->name);
+                            $Empreendimento = $name[1];
+                            $Negocio = $name[0];
+                        }
+
+                        $idCorretor = $user->responsible->id;
+                        $Corretor = Corretor::index($idCorretor);
+                        if(isset($Corretor[0]->name)){
+                            $CorretorName = $Corretor[0]->name;
+                        } 
                     ?>
                     <tr>
                         <?php include_once 'customFields.php';
@@ -122,6 +128,8 @@
                         $Mensagem = '';
                         $endpoint1 = '';
                         $endpoint2 = '';
+                        $value1 = '';
+                        $value2 = '';
                         
                         foreach ($user->entityCustomFields as $values): 
                             if ($values->id == 'CF_42AmaJiZCW64LDjl'){
@@ -130,15 +138,19 @@
                             if ($values->id == 'CF_ylAm0viKi37pqvbx'){
                                 if ($Empreendimento == ''){
                                     $endpoint1 = '/customFields/CF_ylAm0viKi37pqvbx/options/' . $values->options[0];
-                                    $value = CustomFields::index($endpoint1);
-                                    $Empreendimento = $value->label;
+                                    $value1 = CustomFields::index($endpoint1);
+                                    if(isset($value1->label)){
+                                        $Empreendimento = $value1->label;
+                                    }
                                     $Negocio = $user->name;
                                 }
                             }
                             if ($values->id  == 'CF_Pj3qYeidiNxLqQeb'){
                                 $endpoint2 = '/customFields/CF_Pj3qYeidiNxLqQeb/options/'. $values->options[0]; 
-                                $value = CustomFields::index($endpoint2);
-                                $Bairro = $value->label;
+                                $value2 = CustomFields::index($endpoint2);
+                                if(isset($value2->label)){
+                                    $Bairro = $value2->label;
+                                }
                             }
                             if ($values->id == 'CF_GwyMgWi9CWAzzMLA'){
                                 $Origem = $values->textValue;
@@ -150,8 +162,8 @@
                                     $Qualificação = 'Ruim';
                                 }
                             }
+                        endforeach
                         ?>
-                        <?php endforeach ?>
                         <td scope="row"><?= $Negocio ?></td>
                         <td scope="row"><?= $Empreendimento ?></td>
                         <td scope="row"><?= $Bairro ?></td>

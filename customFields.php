@@ -4,7 +4,7 @@ class CustomFields
 {
     public static function index($endpoint)
     {
-        $cURLConnection = curl_init('https://api.moskitcrm.com/v2' . $endpoint);
+        $cURLConnection = curl_init('https://api.moskitcrm.com/v2' . $endpoint . '?order=desc');
         curl_setopt($cURLConnection, CURLOPT_RETURNTRANSFER, true);
         curl_setopt($cURLConnection, CURLOPT_HTTPHEADER, array(
         'apikey: 168ec8df-5e4f-440f-b3cd-d03b1039dff7',

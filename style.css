@@ -40,3 +40,15 @@ table {
 	max-height: 150px;
 	margin: 0px;
 }
+td:nth-child(6) { 
+	width: 8%;
+}
+th:nth-child(6) { 
+	width: 8%;
+}
+td:nth-child(3) { 
+	width: 5%;
+}
+th:nth-child(3) { 
+	width: 5%;
+}
